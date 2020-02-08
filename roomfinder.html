@@ -131,10 +131,10 @@
                     <div class="row text-center" style="margin-bottom: 1.5em">
                         <p>Enter time and date here to see available study spaces in Tech Institute! </p>
                     </div>
-                    <div class="row text-center" style="width:250px; margin: auto auto 1.5em;">
+                    <div class="row text-center" style="width:208px; margin: auto auto 1.5em;">
                         <div id='timeSelection'></div>
                     </div>
-                    <div class="row text-center" style="width:650px; margin:auto" id="availablerooms">
+                    <div class="row text-center" style="width:200px; margin:auto" id="availablerooms">
                     </div>
                     <div class="result-padding" style="margin-bottom: 15em"></div>
                 </div>
@@ -314,6 +314,7 @@
                 while (availablerooms.firstChild) {
                     availablerooms.removeChild(availablerooms.firstChild);
                 }
+				availablerooms.innerHTML = '';
                 var xmldoc = document.implementation.createDocument("http://www.collegenet.com/r25", "r25:space_availability", null);
                 var rooms = [233, 1282, 1251, 126, 127, 128, 129, 130, 131, 132, 12, 101, 102, 103, 104, 105, 106,
                 193, 194, 195, 196, 108, 180, 181, 182, 183, 184, 185, 186, 299];
@@ -348,7 +349,7 @@
                             var avl = room.getElementsByTagNameNS("http://www.collegenet.com/r25", "available_dates")[0];
                             if (avl.textContent !== "0"){
                                 // Room is available, push to array
-                                arr.push(room.getElementsByTagNameNS("http://www.collegenet.com/r25", "formal_name")[0].textContent);
+                                arr.push(room.getElementsByTagNameNS("http://www.collegenet.com/r25", "formal_name")[0].textContent.slice(24));
                             }
                         }
                         createTable(arr);
@@ -357,31 +358,36 @@
                 xmlhttp.send(xmldoc);
             }
             function createTable(tableData) {
-                var table = document.createElement('table');
-                var att = document.createAttribute("class");
-                att.value = "minimalistBlack";
-                table.setAttributeNode(att);
-                var tableBody = document.createElement('tbody');
-                var row, cell;
+				var availablerooms = document.getElementById("availablerooms");
+				if (tableData.length > 0){
+					var table = document.createElement('table');
+					var att = document.createAttribute("class");
+					att.value = "minimalistBlack";
+					table.setAttributeNode(att);
+					var tableBody = document.createElement('tbody');
+					var row, cell;
 
-                tableData.forEach(function(data, index, array) {
-                    if (index % 3 === 0) {
-                        row = document.createElement('tr');
-                        cell = document.createElement('td');
-                        cell.appendChild(document.createTextNode(data));
-                        row.appendChild(cell);
-                        tableBody.appendChild(row);
-                    }
-                    else{
-                        cell = document.createElement('td');
-                        cell.appendChild(document.createTextNode(data));
-                        row.appendChild(cell);
-                    }
-                });
+					tableData.forEach(function(data, index, array) {
+						if (index % 4 === 0) {
+							row = document.createElement('tr');
+							cell = document.createElement('td');
+							cell.appendChild(document.createTextNode(data));
+							row.appendChild(cell);
+							tableBody.appendChild(row);
+						}
+						else{
+							cell = document.createElement('td');
+							cell.appendChild(document.createTextNode(data));
+							row.appendChild(cell);
+						}
+					});
 
-                table.appendChild(tableBody);
-                var availablerooms = document.getElementById("availablerooms");
-                availablerooms.appendChild(table);
+					table.appendChild(tableBody);
+					availablerooms.appendChild(table);
+				}
+				else{
+					availablerooms.innerHTML = 'All rooms are booked for the chosen duration!';
+				}
             }
         </script>
         <script src="assets/js/plugins.js"></script>
