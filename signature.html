@@ -1,0 +1,343 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="En"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MSAB</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <!-- Google fonts link-->
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script&amp;subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://unpkg.com/formiojs@latest/dist/formio.full.min.css'>
+
+    <script src='https://unpkg.com/formiojs@latest/dist/formio.full.min.js'></script>
+
+    <!--For Plugins external css-->
+    <link rel="stylesheet" href="assets/css/plugins.css" />
+
+    <!--Theme custom css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!--Theme Responsive css-->
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+
+    <script src="assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+</head>
+<body data-spy="scroll" data-target=".navbar-collapse">
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<div class='preloader'><div class='loaded'>&nbsp;</div></div>
+<div class="culmn">
+    <header id="main_menu" class="header navbar-fixed-top">
+        <div class="main_menu_bg">
+            <div class="container">
+                <div class="row">
+                    <div class="nave_menu">
+                        <nav class="navbar navbar-default">
+                            <div class="container-fluid">
+                                <!-- Brand and toggle get grouped for better mobile display -->
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                    <a class="navbar-brand" href="#home">
+                                        <img src="assets/images/logo.png"/>
+                                    </a>
+                                </div>
+
+                                <!-- Collect the nav links, forms, and other content for toggling -->
+
+                                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                    <ul class="nav navbar-nav navbar-right">
+                                        <li><a href="index.html">Home</a></li>
+                                        <li><a href="roomfinder.html">RoomFinder</a></li>
+                                        <li><a href="funding.html">Funding</a></li>
+                                        <li><a href="team.html">Team</a></li>
+                                        <li><a href="contact.html">Contact</a></li>
+                                        <li>
+                                            <a href="#"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-search"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <form class="navbar-form" role="search" onsubmit='loadSearch();'>
+                                                        <div class="form-group">
+                                                            <input type="text" id = "SearchBar" class="search-form-control" placeholder="Search">
+                                                        </div>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header> <!--End of header -->
+
+    <section id="funding" class="home">
+        <div class="overlay all_overlay">
+            <div class="row">
+                <div class="col-sm-12 ">
+                    <div class="text-center">
+                        <div class="main_home wow fadeInUp" data-wow-duration="700ms">
+                            <div class="custom-h4">Welcome to </div>
+                            <br>
+                            <br>
+                            <br>
+                            <p class = "custom">McCormick Student Advisory Board</p>
+                            <div class="whiteseparator"></div>
+                            <div class="home_btn">
+                                <a href="#about" class="main-btn main-btn-primary">ABOUT US</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="row">
+                <div class="sections text-center">
+                    <div class="head_title text-center">
+                        <h2>Funding Application Review</h2>
+                        <div class="separator"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <!--TODO: Add JS to update the student group and submission date-->
+                <div class="flex-container">
+                    <div>
+                        <span class="groupname">Student Group: MSAB</span>
+                    </div>
+                    <div>
+                        <span class="groupname">Proposal Submission Date: 09/08/2018</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div id='signature'></div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="main_footer text-center">
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="copyright_text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- START SCROLL TO TOP  -->
+
+<div class="scrollup">
+    <a href="#"><i class="fa fa-chevron-up"></i></a>
+</div>
+
+<script src="assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="assets/js/vendor/bootstrap.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="assets/js/jquery.mixitup.min.js"></script>
+<script src="assets/js/jquery.easing.1.3.js"></script>
+<script src="assets/js/jquery.masonry.min.js"></script>
+<script src="assets/js/jquery.fancybox.pack.js"></script>
+<!--This is link only for gmaps-->
+<script src="http://maps.google.com/maps/api/js"></script>
+<script src="assets/js/gmaps.min.js"></script>
+
+<script>
+    Formio.createForm(document.getElementById('signature'), {
+        "display": "form",
+        "components": [
+            {
+                "columns": [
+                    {
+                        "components": [
+                            {
+                                "label": "I've received the funding proposal for the student organization listed above and approve of its content.",
+                                "shortcut": "",
+                                "mask": false,
+                                "tableView": true,
+                                "type": "checkbox",
+                                "input": true,
+                                "key": "confirmation",
+                                "validate": {
+                                    "required": true,
+                                    "unique": false,
+                                    "customMessage": "Please review the application and check this box before you submit. Thank you!",
+                                    "json": ""
+                                },
+                                "conditional": {
+                                    "show": "",
+                                    "when": "",
+                                    "json": ""
+                                },
+                                "customConditional": ""
+                            }
+                        ],
+                        "width": 8,
+                        "offset": 2,
+                        "push": 0,
+                        "pull": 0,
+                        "type": "column",
+                        "input": true,
+                        "key": "",
+                        "tableView": true,
+                        "label": ""
+                    },
+                    {
+                        "components": [],
+                        "width": 2,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "type": "column",
+                        "input": true,
+                        "key": "",
+                        "tableView": true,
+                        "label": ""
+                    }
+                ],
+                "label": "Columns",
+                "hideLabel": true,
+                "mask": false,
+                "tableView": false,
+                "type": "columns",
+                "input": false,
+                "key": "checkboxColumn",
+                "conditional": {
+                    "show": "",
+                    "when": "",
+                    "json": ""
+                },
+                "properties": {},
+                "customConditional": "",
+                "tags": []
+            },
+            {
+                "columns": [
+                    {
+                        "components": [
+                            {
+                                "label": "Signature",
+                                "backgroundColor": "rgb(248,248,248)",
+                                "height": "150",
+                                "mask": false,
+                                "tableView": true,
+                                "type": "signature",
+                                "input": true,
+                                "key": "signature",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "required": true,
+                                    "unique": false,
+                                    "customMessage": "",
+                                    "json": ""
+                                },
+                                "conditional": {
+                                    "json": ""
+                                },
+                                "properties": {},
+                                "tags": [],
+                                "logic": [],
+                                "customConditional": ""
+                            }
+                        ],
+                        "width": 6,
+                        "offset": 3,
+                        "push": 0,
+                        "pull": 0,
+                        "type": "column",
+                        "input": true,
+                        "key": "",
+                        "tableView": true,
+                        "label": ""
+                    },
+                    {
+                        "components": [],
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "type": "column",
+                        "input": true,
+                        "key": "",
+                        "tableView": true,
+                        "label": ""
+                    }
+                ],
+                "label": "Columns",
+                "hideLabel": true,
+                "mask": false,
+                "tableView": false,
+                "type": "columns",
+                "input": false,
+                "key": "signatureColumn",
+                "conditional": {
+                    "show": "",
+                    "when": "",
+                    "json": ""
+                },
+                "properties": {},
+                "customConditional": "",
+                "tags": []
+            },
+            {
+                "type": "button",
+                "label": "Submit",
+                "key": "submit",
+                "disableOnInvalid": true,
+                "theme": "primary",
+                "input": true,
+                "tableView": true
+            }
+        ],
+        "settings": {
+            "pdf": {
+                "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+                "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+            }
+        }
+    }).then(function(form) {
+        form.on('submit', function(submission) {
+            console.log(submission);
+        })});
+</script>
+<script src="assets/js/plugins.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
+
+

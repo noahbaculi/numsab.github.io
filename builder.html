@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58453303-6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-58453303-6');
+    </script>
+
+    <base href="https://formio.github.io/formio.js/"></base>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JavaScript Powered Forms and Form.io SDK</title>
+    <link href="https://formio.github.io/formio.js/app/syntax.css" rel="stylesheet">
+    <link href="https://formio.github.io/formio.js/app/main.css" rel="stylesheet">
+    <link href="https://formio.github.io/formio.js/app/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://formio.github.io/formio.js/app/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link href="https://formio.github.io/formio.js/app/bootswatch/yeti/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://formio.github.io/formio.js/dist/formio.full.min.css" rel="stylesheet">
+    <script src="https://formio.github.io/formio.js/app/jquery/jquery.slim.min.js"></script>
+    <script src="https://formio.github.io/formio.js/app/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://formio.github.io/formio.js/dist/formio.full.min.js"></script>
+
+    <script type="text/javascript">Formio.icons = 'fontawesome';</script>
+</head>
+<body>
+<a href="https://github.com/formio/formio.js"></a>
+<div class="container-fluid" style="margin-top: 60px;">
+  <div class="row">
+  <div class="col-sm-8">
+    <h3 class="text-center text-muted">The <a href="https://github.com/formio/formio.js" target="_blank">Form Builder</a> allows you to build a <select class="form-control" id="form-select" style="display: inline-block; width: 150px;"><option value="form">Form</option><option value="wizard">Wizard</option><option value="pdf">PDF</option></select></h3>
+    <div class="well" style="background-color: #fdfdfd;">
+      <div id="builder"></div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <h3 class="text-center text-muted">as JSON Schema</h3>
+    <div class="well jsonviewer">
+      <pre id="json"></pre>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <h3 class="text-center text-muted">which <a href="https://github.com/formio/ngFormio" target="_blank">Renders as a Form</a> in your Application</h3>
+    <div id="formio" class="well"></div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <h3 class="text-center text-muted">which creates a Submission JSON</h3>
+    <div class="well jsonviewer">
+      <pre id="subjson"></pre>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<script type="text/javascript">
+    var formioComponents = [
+        {
+            "labelPosition": "left-left",
+            "showWordCount": false,
+            "showCharCount": false,
+            "tableView": true,
+            "type": "textfield",
+            "label": "Name of Organization:",
+            "allowMultipleMasks": false,
+            "input": true,
+            "key": "groupName",
+            "defaultValue": "",
+            "validate": {
+                "required": true,
+                "customMessage": "",
+                "json": ""
+            },
+            "conditional": {
+                "show": "",
+                "when": "",
+                "json": ""
+            },
+            "inputFormat": "plain",
+            "properties": {},
+            "customConditional": "",
+            "tags": [],
+            "widget": {
+                "type": ""
+            }
+        },
+        {
+            "addAnotherPosition": "bottom",
+            "label": "List of Executive Board Members Submitting Proposal:",
+            "disableAddingRemovingRows": false,
+            "defaultOpen": false,
+            "addAnother": "",
+            "mask": false,
+            "tableView": true,
+            "type": "datagrid",
+            "input": true,
+            "key": "boardMembers",
+            "defaultValue": [
+                {
+                    "name": "",
+                    "emailAddress": "",
+                    "classYear": "",
+                    "position": ""
+                }
+            ],
+            "validate": {
+                "unique": false,
+                "customMessage": "",
+                "json": ""
+            },
+            "conditional": {
+                "json": ""
+            },
+            "components": [
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "type": "textfield",
+                    "label": "Name",
+                    "allowMultipleMasks": false,
+                    "input": true,
+                    "key": "name",
+                    "inputFormat": "plain",
+                    "row": "0-0",
+                    "validateOn": "blur",
+                    "validate": {
+                        "required": true,
+                        "customMessage": "",
+                        "json": ""
+                    },
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "type": "textfield",
+                    "label": "Northwestern Email Address",
+                    "allowMultipleMasks": false,
+                    "input": true,
+                    "key": "emailAddress",
+                    "validateOn": "blur",
+                    "validate": {
+                        "pattern": "[a-zA-Z0-9]+@([a-zA-Z]+\\.)?northwestern\\.edu",
+                        "unique": false,
+                        "customMessage": "Invalid Northwestern Email Address",
+                        "json": "",
+                        "required": true
+                    },
+                    "row": "0-1",
+                    "defaultValue": "",
+                    "inputFormat": "plain",
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "type": "textfield",
+                    "label": "Class Year",
+                    "allowMultipleMasks": false,
+                    "input": true,
+                    "key": "classYear",
+                    "defaultValue": "",
+                    "validateOn": "blur",
+                    "validate": {
+                        "pattern": "20\\d\\d",
+                        "unique": false,
+                        "customMessage": "Invalid Class Year",
+                        "json": "",
+                        "required": true
+                    },
+                    "conditional": {
+                        "show": "",
+                        "when": "",
+                        "json": ""
+                    },
+                    "inputFormat": "plain",
+                    "customConditional": "",
+                    "row": "0-2",
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "type": "textfield",
+                    "label": "Executive Board Position",
+                    "allowMultipleMasks": false,
+                    "input": true,
+                    "key": "position",
+                    "row": "0-3",
+                    "validateOn": "blur",
+                    "validate": {
+                        "required": true,
+                        "customMessage": "",
+                        "json": ""
+                    },
+                    "widget": {
+                        "type": ""
+                    }
+                }
+            ],
+            "properties": {},
+            "logic": [],
+            "customConditional": ""
+        },
+        {
+            "title": "Please answer the following questions:",
+            "mask": false,
+            "tableView": false,
+            "type": "panel",
+            "input": false,
+            "key": "panel",
+            "label": "Panel",
+            "components": [
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "rows": 5,
+                    "type": "textarea",
+                    "input": true,
+                    "key": "question1",
+                    "label": "1. What is your organization’s current mission or objective?",
+                    "defaultValue": "",
+                    "validateOn": "blur",
+                    "validate": {
+                        "customMessage": "Response to this question is required.",
+                        "json": "",
+                        "required": true
+                    },
+                    "conditional": {
+                        "json": ""
+                    },
+                    "inputFormat": "plain",
+                    "properties": {},
+                    "tags": [],
+                    "logic": [],
+                    "customConditional": "",
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "rows": 5,
+                    "type": "textarea",
+                    "input": true,
+                    "key": "question2",
+                    "label": "2. What is your organization’s project or proposal that you would like funded?",
+                    "defaultValue": "",
+                    "validateOn": "blur",
+                    "validate": {
+                        "customMessage": "Response to this question is required.",
+                        "json": "",
+                        "required": true
+                    },
+                    "conditional": {
+                        "json": "",
+                        "show": "",
+                        "when": ""
+                    },
+                    "inputFormat": "plain",
+                    "properties": {},
+                    "tags": [],
+                    "logic": [],
+                    "customConditional": "",
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "rows": 5,
+                    "type": "textarea",
+                    "input": true,
+                    "key": "question3",
+                    "label": "3. What is the anticipated impact your proposal would have within your student organization? How will you make sure this is accomplished?",
+                    "defaultValue": "",
+                    "validateOn": "blur",
+                    "validate": {
+                        "customMessage": "Response to this question is required.",
+                        "json": "",
+                        "required": true
+                    },
+                    "conditional": {
+                        "json": "",
+                        "show": "",
+                        "when": ""
+                    },
+                    "inputFormat": "plain",
+                    "properties": {},
+                    "tags": [],
+                    "logic": [],
+                    "customConditional": "",
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "rows": 5,
+                    "type": "textarea",
+                    "input": true,
+                    "key": "question4",
+                    "label": "4. What impact or effect would this proposal have on the McCormick community? How will you make sure this is accomplished?",
+                    "defaultValue": "",
+                    "validateOn": "blur",
+                    "validate": {
+                        "customMessage": "Response to this question is required.",
+                        "json": "",
+                        "required": true
+                    },
+                    "conditional": {
+                        "json": ""
+                    },
+                    "inputFormat": "plain",
+                    "properties": {},
+                    "tags": [],
+                    "logic": [],
+                    "customConditional": "",
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "rows": 5,
+                    "type": "textarea",
+                    "input": true,
+                    "key": "question5",
+                    "label": "5. What is the expected time line for this project? When will this project occur? Please specify if this is an on-going effort or project maintenance. Conversely, if this is a new project, make that known as well.",
+                    "defaultValue": "",
+                    "validateOn": "blur",
+                    "validate": {
+                        "customMessage": "Response to this question is required.",
+                        "json": "",
+                        "required": true
+                    },
+                    "conditional": {
+                        "json": "",
+                        "show": "",
+                        "when": ""
+                    },
+                    "inputFormat": "plain",
+                    "properties": {},
+                    "tags": [],
+                    "logic": [],
+                    "customConditional": "",
+                    "widget": {
+                        "type": ""
+                    }
+                },
+                {
+                    "showWordCount": false,
+                    "showCharCount": false,
+                    "tableView": true,
+                    "rows": 5,
+                    "type": "textarea",
+                    "input": true,
+                    "key": "question6",
+                    "label": "6. Does your student group included members from schools other than McCormick? If so, please list the total number of members from each of the schools outside of McCormick.",
+                    "defaultValue": "",
+                    "validateOn": "blur",
+                    "validate": {
+                        "customMessage": "Response to this question is required.",
+                        "json": "",
+                        "required": true
+                    },
+                    "conditional": {
+                        "json": ""
+                    },
+                    "inputFormat": "plain",
+                    "properties": {},
+                    "tags": [],
+                    "logic": [],
+                    "customConditional": "",
+                    "widget": {
+                        "type": ""
+                    }
+                }
+            ],
+            "properties": {}
+        },
+        {
+            "label": "Please include a budget for your proposal: (.xlsx, .xls only)",
+            "mask": false,
+            "tableView": true,
+            "type": "file",
+            "input": true,
+            "key": "budgetFile",
+            "defaultValue": [],
+            "filePattern": ".xlsx, .xls",
+            "storage": "url",
+            "dir": "",
+            "webcam": false,
+            "url": "",
+            "conditional": {
+                "json": ""
+            },
+            "customConditional": "",
+            "validate": {
+                "required": true,
+                "unique": false,
+                "customMessage": "Please upload a valid budget for your proposal",
+                "json": ""
+            }
+        },
+        {
+            "labelPosition": "left-left",
+            "showWordCount": false,
+            "showCharCount": false,
+            "tableView": true,
+            "type": "textfield",
+            "input": true,
+            "key": "advisorName",
+            "defaultValue": "",
+            "label": "Name of Faculty Advisor:",
+            "inputFormat": "plain",
+            "validate": {
+                "customMessage": "",
+                "json": "",
+                "required": true
+            },
+            "properties": {},
+            "tags": [],
+            "widget": {
+                "type": ""
+            }
+        },
+        {
+            "labelPosition": "left-left",
+            "showWordCount": false,
+            "showCharCount": false,
+            "tableView": true,
+            "type": "textfield",
+            "input": true,
+            "key": "advisorEmail",
+            "label": "Email of Faculty Advisor:",
+            "properties": {},
+            "tags": [],
+            "defaultValue": "",
+            "validateOn": "blur",
+            "validate": {
+                "required": true,
+                "pattern": "[a-zA-Z0-9\\.]+@[a-zA-Z0-9\\.]+\\.[a-zA-Z0-9\\.]+",
+                "customMessage": "Please enter a valid email address",
+                "json": ""
+            },
+            "inputFormat": "plain",
+            "widget": {
+                "type": ""
+            }
+        },
+        {
+            "type": "button",
+            "label": "Submit",
+            "key": "submit",
+            "disableOnInvalid": true,
+            "theme": "primary",
+            "input": true,
+            "tableView": true
+        }
+    ];
+var subJSON = document.getElementById('subjson');
+var builder = new Formio.FormBuilder(document.getElementById("builder"), {
+  display: 'form',
+  components: formioComponents,
+  settings: {
+    pdf: {
+      "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+      "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+    }
+  }
+}, {
+  baseUrl: 'https://examples.form.io'
+});
+
+var onForm = function(form) {
+  form.on('change', function() {
+    subJSON.innerHTML = '';
+    subJSON.appendChild(document.createTextNode(JSON.stringify(form.submission, null, 4)));
+  });
+};
+
+var setDisplay = function(display) {
+  builder.setDisplay(display).then(function(instance) {
+     var jsonElement = document.getElementById('json');
+     var formElement = document.getElementById('formio');
+     instance.on('saveComponent', function(event) {
+       var schema = instance.schema;
+       jsonElement.innerHTML = '';
+       formElement.innerHTML = '';
+       jsonElement.appendChild(document.createTextNode(JSON.stringify(schema, null, 4)));
+       Formio.createForm(formElement, schema).then(onForm);
+     });
+   
+     instance.on('editComponent', function(event) {
+       console.log('editComponent', event);
+         jsonElement.innerHTML = '';
+         jsonElement.appendChild(document.createTextNode(JSON.stringify(instance.schema, null, 4)));
+     });
+     
+     instance.on('updateComponent', function(event) {
+       jsonElement.innerHTML = '';
+       jsonElement.appendChild(document.createTextNode(JSON.stringify(instance.schema, null, 4)));
+     });
+     
+     instance.on('deleteComponent', function(event) {
+       jsonElement.innerHTML = '';
+       jsonElement.appendChild(document.createTextNode(JSON.stringify(instance.schema, null, 4)));
+     });
+     
+     Formio.createForm(formElement, instance.schema).then(onForm);
+   });
+};
+
+// // Handle the form selection.
+// var formSelect = document.getElementById('form-select');
+// formSelect.addEventListener("change", function() {
+//   setDisplay(this.value);
+// });
+
+setDisplay('form');
+</script>
+
+
+</div>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>
