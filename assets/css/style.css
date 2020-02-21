@@ -1,12 +1,4 @@
 
-
-/*
-Author: Bootstrapthemes
-Author URI: http://bootstrapthemes.co
-*/
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
 html,
 body {
     background-color: #fff;
@@ -116,26 +108,6 @@ a{
 img {
     max-width: 100%;
 }
-
-table.minimalistBlack {
-    font-family: "Arial Black", Gadget, sans-serif;
-    border: 1px solid #000000;
-    width: 100%;
-    text-align: center;
-    border-collapse: collapse;
-}
-table.minimalistBlack td, table.minimalistBlack th {
-    border: 1px solid #000000;
-    padding: 6px 6px;
-}
-table.minimalistBlack tbody td {
-    font-size: 15px;
-    color: #464646;
-}
-table.minimalistBlack tfoot td {
-    font-size: 14px;
-}
-
 textarea,
 input[type="text"],
 input[type="password"],
@@ -499,9 +471,29 @@ Button
 
 .custom{
     color:white;
+    line-height: 150%;
     font-weight: bold;
     font-size: 60px;
     padding-bottom: 90px;
+}
+
+table.minimalistBlack {	
+    font-family: "Arial Black", Gadget, sans-serif;	
+    border: 1px solid #000000;	
+    width: 100%;	
+    text-align: center;	
+    border-collapse: collapse;	
+}	
+table.minimalistBlack td, table.minimalistBlack th {	
+    border: 1px solid #000000;	
+    padding: 6px 6px;	
+}	
+table.minimalistBlack tbody td {	
+    font-size: 15px;	
+    color: #464646;	
+}	
+table.minimalistBlack tfoot td {	
+    font-size: 14px;	
 }
 
 .center {
