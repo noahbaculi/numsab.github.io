@@ -61,22 +61,26 @@
                                                 <img src="assets/images/logo.png"/>
                                             </a>
                                         </div>
+
                                         <!-- Collect the nav links, forms, and other content for toggling -->
+
                                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                             <ul class="nav navbar-nav navbar-right">
                                                 <li><a href="index.html">Home</a></li>
-                                                <li><a href="#roomfinder">RoomFinder</a></li>
-                                                <li><a href="funding.html">Funding</a></li>
+                                                <li><a href="roomfinder.html">RoomFinder</a></li>
+                                                <li><a href="#funding">Funding</a></li>
                                                 <li><a href="team.html">Team</a></li>
                                                 <li><a href="contact.html">Contact</a></li>
                                                 <li>
-                                                    <a href="#"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                    <a href="#" data-toggle="dropdown" role="button"
+                                                       aria-haspopup="true" aria-expanded="false">
                                                         <i class="fa fa-search"></i>
                                                     </a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                          <form class="navbar-form" role="search" onsubmit='loadSearch();'>
-                                                              <div class="form-group">
+                                                            <form class="navbar-form" role="search"
+                                                                  onsubmit='loadSearch();'>
+                                                                <div class="form-group">
                                                                   <input type="text" id = "SearchBar" class="search-form-control" placeholder="Search">
                                                               </div>
                                                           </form>
@@ -93,18 +97,17 @@
                 </div>
             </header> <!--End of header -->
 
-            <section id="roomfinder" class="home">
+            <section class="home" id="funding">
                 <div class="overlay all_overlay">
                     <div class="row">
                         <div class="col-sm-12 ">
                             <div class="text-center">
                                 <div class="main_home wow fadeInUp" data-wow-duration="700ms">
-                                    <div class="custom-h4">Welcome to </div>
+                                    <div class="custom-h4">Welcome to</div>
                                     <br>
                                     <br>
                                     <br>
-                                    <p class = "custom">McCormick Student Advisory Board</p>
-
+                                    <p class="custom">McCormick Student Advisory Board</p>
                                     <div class="whiteseparator"></div>
                                     <div class="home_btn">
                                         <a href="#about" class="main-btn main-btn-primary">ABOUT US</a>
@@ -120,26 +123,19 @@
                 <div class="container">
                     <div class="row">
                         <div class="sections text-center">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <div class="head_title text-center">
-                                    <div class="subtitle custom-h4">Need a place to study in tech?</div>
-                                    <h2>Tech Study Space Finder!</h2>
-                                    <div class="separator"></div>
-                                </div>
+                            <div class="head_title text-center">
+                                <h2>Funding Application</h2>
+                                <div class="separator"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="row text-center" style="margin-bottom: 1.5em">
-                        <p>Enter time and date here to see available study spaces in Tech Institute! </p>
+                    <div class="row">
+                        <div id='datagrid'></div>
                     </div>
-                    <div class="row text-center" style="width:208px; margin: auto auto 1.5em;">
-                        <div id='timeSelection'></div>
-                    </div>
-                    <div class="row text-center" style="width:200px; margin:auto" id="availablerooms">
-                    </div>
-                    <div class="result-padding" style="margin-bottom: 15em"></div>
                 </div>
             </section>
+
+
             <footer id="footer" class="footer">
                 <div class="container">
                     <div class="main_footer text-center">
@@ -172,111 +168,918 @@
         <script src="http://maps.google.com/maps/api/js"></script>
         <script src="assets/js/gmaps.min.js"></script>
 
+        <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
         <script>
-            Date.prototype.toIsoString = function() {
-                var tzo = -this.getTimezoneOffset(),
-                    dif = tzo >= 0 ? '+' : '-',
-                    pad = function(num) {
-                        var norm = Math.floor(Math.abs(num));
-                        return (norm < 10 ? '0' : '') + norm;
-                    };
-                return this.getFullYear() +
-                    '-' + pad(this.getMonth() + 1) +
-                    '-' + pad(this.getDate()) +
-                    'T' + pad(this.getHours()) +
-                    ':' + pad(this.getMinutes()) +
-                    ':' + pad(this.getSeconds()) +
-                    dif + pad(tzo / 60) +
-                    ':' + pad(tzo % 60);
+            var config = {
+                apiKey: "AIzaSyBDsW4pjdw_NlJeU0OkhZGP5ZhYJDmsJig",
+                authDomain: "msab-78e5f.firebaseapp.com",
+                databaseURL: "https://msab-78e5f.firebaseio.com",
+                projectId: "msab-78e5f",
+                storageBucket: "msab-78e5f.appspot.com",
+                messagingSenderId: "399368680758"
             };
-
-            Formio.createForm(document.getElementById('timeSelection'), {
+            firebase.initializeApp(config);
+            var database = firebase.database();
+            function writeUserData(userId, email) {
+              firebase.database().ref('Funding Forms/' + userId).set({
+                Details:email,
+              });
+            }   
+            Formio.createForm(document.getElementById('datagrid'), {
                 "display": "form",
                 "components": [
                     {
-                        "mask": false,
+                        "labelPosition": "left-left",
+                        "showWordCount": false,
+                        "showCharCount": false,
                         "tableView": true,
-                        "type": "datetime",
-                        "label": "Start Time",
+                        "type": "textfield",
+                        "label": "Name of Organization:",
+                        "allowMultipleMasks": false,
                         "input": true,
-                        "key": "dateTime",
-                        "suffix": true,
+                        "key": "groupName",
                         "defaultValue": "",
-                        "widget": {
-                            "type": "calendar",
-                            "displayInTimezone": "viewer",
-                            "language": "en",
-                            "useLocaleSettings": false,
-                            "allowInput": true,
-                            "mode": "single",
-                            "enableTime": true,
-                            "noCalendar": false,
-                            "format": "yyyy-MM-dd hh:mm a",
-                            "defaultDate": "",
-                            "hourIncrement": 1,
-                            "minuteIncrement": 15,
-                            "time_24hr": false,
-                            "minDate": "",
-                            "maxDate": ""
-                        },
-                        "datePicker": {
-                            "minDate": "",
-                            "maxDate": ""
-                        },
-                        "timePicker": {
-                            "minuteStep": 15
-                        },
                         "validate": {
-                            "unique": false,
+                            "required": true,
                             "customMessage": "",
-                            "json": "",
-                            "custom": "var time = moment(input, 'yyyy-MM-dd hh:mm a');\nvalid = ((time.minutes() % 15) === 0) ? true : 'Please round to the nearest 15 minutes';"
+                            "json": ""
                         },
-                        "customDefaultValue": "const roundedDown = Math.floor(moment().minute() / 15) * 15;\nvalue = moment().minute(roundedDown).second(0);"
+                        "conditional": {
+                            "show": "",
+                            "when": "",
+                            "json": ""
+                        },
+                        "inputFormat": "plain",
+                        "properties": {},
+                        "customConditional": "",
+                        "tags": [],
+                        "widget": {
+                            "type": ""
+                        }
                     },
                     {
-                        "label": "Duration",
+                        "addAnotherPosition": "bottom",
+                        "label": "List of Executive Board Members Submitting Proposal:",
+                        "disableAddingRemovingRows": false,
+                        "defaultOpen": false,
+                        "addAnother": "",
                         "mask": false,
                         "tableView": true,
-                        "type": "select",
+                        "type": "datagrid",
                         "input": true,
-                        "key": "duration",
+                        "key": "boardMembers",
+                        "defaultValue": [
+                            {
+                                "name": "",
+                                "emailAddress": "",
+                                "classYear": "",
+                                "position": ""
+                            }
+                        ],
                         "validate": {
                             "unique": false,
                             "customMessage": "",
                             "json": ""
                         },
-                        "data": {
-                            "values": [
-                                {
-                                    "label": "15 minutes",
-                                    "value": "15Minutes"
-                                },
-                                {
-                                    "label": "30 minutes",
-                                    "value": "30Minutes"
-                                },
-                                {
-                                    "label": "60 minutes",
-                                    "value": "60Minutes"
-                                }
-                            ]
+                        "conditional": {
+                            "json": ""
                         },
-                        "defaultValue": "15Minutes",
+                        "components": [
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "type": "textfield",
+                                "label": "Name",
+                                "allowMultipleMasks": false,
+                                "input": true,
+                                "key": "name",
+                                "inputFormat": "plain",
+                                "row": "0-0",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "required": true,
+                                    "customMessage": "",
+                                    "json": ""
+                                },
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "type": "textfield",
+                                "label": "Northwestern Email Address",
+                                "allowMultipleMasks": false,
+                                "input": true,
+                                "key": "emailAddress",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "pattern": "[a-zA-Z0-9]+@([a-zA-Z]+\\.)?northwestern\\.edu",
+                                    "unique": false,
+                                    "customMessage": "Invalid Northwestern Email Address",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "row": "0-1",
+                                "defaultValue": "",
+                                "inputFormat": "plain",
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "type": "textfield",
+                                "label": "Class Year",
+                                "allowMultipleMasks": false,
+                                "input": true,
+                                "key": "classYear",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "pattern": "20\\d\\d",
+                                    "unique": false,
+                                    "customMessage": "Invalid Class Year",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "show": "",
+                                    "when": "",
+                                    "json": ""
+                                },
+                                "inputFormat": "plain",
+                                "customConditional": "",
+                                "row": "0-2",
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "type": "textfield",
+                                "label": "Executive Board Position",
+                                "allowMultipleMasks": false,
+                                "input": true,
+                                "key": "position",
+                                "row": "0-3",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "required": true,
+                                    "customMessage": "",
+                                    "json": ""
+                                },
+                                "widget": {
+                                    "type": ""
+                                }
+                            }
+                        ],
                         "properties": {},
-                        "tags": [],
-                        "valueProperty": "value"
+                        "logic": [],
+                        "customConditional": ""
                     },
                     {
-                        "theme": "success",
-                        "shortcut": "",
-                        "disableOnInvalid": true,
+                        "title": "Please answer the following questions:",
+                        "mask": false,
+                        "tableView": false,
+                        "type": "panel",
+                        "input": false,
+                        "key": "panel",
+                        "label": "Panel",
+                        "components": [
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "rows": 1,
+                                "type": "textarea",
+                                "input": true,
+                                "key": "question1",
+                                "label": "1. What is your organization’s current mission or objective?",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "customMessage": "Response to this question is required.",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "json": ""
+                                },
+                                "inputFormat": "plain",
+                                "properties": {},
+                                "tags": [],
+                                "logic": [],
+                                "customConditional": "",
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "rows": 1,
+                                "type": "textarea",
+                                "input": true,
+                                "key": "question2",
+                                "label": "2. What is your organization’s project or proposal that you would like funded?",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "customMessage": "Response to this question is required.",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "json": "",
+                                    "show": "",
+                                    "when": ""
+                                },
+                                "inputFormat": "plain",
+                                "properties": {},
+                                "tags": [],
+                                "logic": [],
+                                "customConditional": "",
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "rows": 1,
+                                "type": "textarea",
+                                "input": true,
+                                "key": "question3",
+                                "label": "3. What is the anticipated impact your proposal would have within your student organization? How will you make sure this is accomplished?",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "customMessage": "Response to this question is required.",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "json": "",
+                                    "show": "",
+                                    "when": ""
+                                },
+                                "inputFormat": "plain",
+                                "properties": {},
+                                "tags": [],
+                                "logic": [],
+                                "customConditional": "",
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "rows": 1,
+                                "type": "textarea",
+                                "input": true,
+                                "key": "question4",
+                                "label": "4. What impact or effect would this proposal have on the McCormick community? How will you make sure this is accomplished?",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "customMessage": "Response to this question is required.",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "json": ""
+                                },
+                                "inputFormat": "plain",
+                                "properties": {},
+                                "tags": [],
+                                "logic": [],
+                                "customConditional": "",
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "rows": 1,
+                                "type": "textarea",
+                                "input": true,
+                                "key": "question5",
+                                "label": "5. What is the expected time line for this project? When will this project occur? Please specify if this is an on-going effort or project maintenance. Conversely, if this is a new project, make that known as well.",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "customMessage": "Response to this question is required.",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "json": "",
+                                    "show": "",
+                                    "when": ""
+                                },
+                                "inputFormat": "plain",
+                                "properties": {},
+                                "tags": [],
+                                "logic": [],
+                                "customConditional": "",
+                                "widget": {
+                                    "type": ""
+                                }
+                            },
+                            {
+                                "showWordCount": false,
+                                "showCharCount": false,
+                                "tableView": true,
+                                "rows": 1,
+                                "type": "textarea",
+                                "input": true,
+                                "key": "question6",
+                                "label": "6. Does your student group included members from schools other than McCormick? If so, please list the total number of members from each of the schools outside of McCormick.",
+                                "defaultValue": "",
+                                "validateOn": "blur",
+                                "validate": {
+                                    "customMessage": "Response to this question is required.",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "json": ""
+                                },
+                                "inputFormat": "plain",
+                                "properties": {},
+                                "tags": [],
+                                "logic": [],
+                                "customConditional": "",
+                                "widget": {
+                                    "type": ""
+                                }
+                            }
+                        ],
+                        "properties": {}
+                    },
+                    {
+                        "label": "Panel",
+                        "title": "Please provide the following funding recommendation-related information:",
+                        "mask": false,
+                        "tableView": false,
+                        "type": "panel",
+                        "input": false,
+                        "key": "panel",
+                        "components": [
+                            {
+                                "label": "Panel",
+                                "title": "Material Costs",
+                                "mask": false,
+                                "tableView": false,
+                                "type": "panel",
+                                "input": false,
+                                "key": "panel",
+                                "components": [
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Total Material Costs:",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "currency",
+                                        "input": true,
+                                        "key": "totalMaterialCosts",
+                                        "delimiter": true,
+                                        "validate": {
+                                            "required": true,
+                                            "unique": false,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": ""
+                                        },
+                                        "validateOn": "blur"
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Panel",
+                                "title": "Basic Costs",
+                                "mask": false,
+                                "tableView": false,
+                                "type": "panel",
+                                "input": false,
+                                "key": "panel",
+                                "components": [
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Food-related small events count (<=30 participants, regular meetings do not qualify):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "smallFoodEvents",
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur",
+                                        "validate": {
+                                            "required": true,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Food-related large events count (>30 participants, regular meetings do not qualify):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "largeFoodEvents",
+                                        "properties": {},
+                                        "tags": [],
+                                        "conditional": {
+                                            "show": "",
+                                            "when": "",
+                                            "json": ""
+                                        },
+                                        "customConditional": "",
+                                        "validateOn": "blur",
+                                        "validate": {
+                                            "required": true,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "University chapter dues:",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "currency",
+                                        "input": true,
+                                        "key": "chapterDues",
+                                        "validate": {
+                                            "unique": false,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true
+                                        },
+                                        "delimiter": true,
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Marketing costs:",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "currency",
+                                        "input": true,
+                                        "key": "marketingCosts",
+                                        "validate": {
+                                            "unique": false,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true
+                                        },
+                                        "delimiter": true,
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Group bonding costs:",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "currency",
+                                        "input": true,
+                                        "key": "bondingCosts",
+                                        "validate": {
+                                            "unique": false,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true
+                                        },
+                                        "delimiter": true,
+                                        "properties": {},
+                                        "tags": [],
+                                        "conditional": {
+                                            "show": "",
+                                            "when": "",
+                                            "json": ""
+                                        },
+                                        "customConditional": "",
+                                        "validateOn": "blur"
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Panel",
+                                "title": "Allowances",
+                                "mask": false,
+                                "tableView": false,
+                                "type": "panel",
+                                "input": false,
+                                "key": "panel",
+                                "components": [
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of events/activities organized (past quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "eventsOrganized",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of active members (participate at least once every two weeks, past quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "activeMembers",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of unique participating non-members (past quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "nonMembers",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of collaborations with another student group or department (past quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "collaborations",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of competitions planned on entering (upcoming quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "competitions",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of outreach events planned (past and upcoming quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "outreachEvents",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Amount of external sponsorship received in the past year:",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "currency",
+                                        "input": true,
+                                        "key": "sponsorshipReceived",
+                                        "validate": {
+                                            "unique": false,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true
+                                        },
+                                        "delimiter": true,
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of fundraising events organized (past and upcoming quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "fundraisingEvents",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "conditional": {
+                                            "show": "",
+                                            "when": "",
+                                            "json": ""
+                                        },
+                                        "customConditional": "",
+                                        "validateOn": "blur"
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Panel",
+                                "title": "Others",
+                                "mask": false,
+                                "tableView": false,
+                                "type": "panel",
+                                "input": false,
+                                "key": "panel",
+                                "components": [
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Transportation and lodging costs (upcoming quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "currency",
+                                        "input": true,
+                                        "key": "travelCosts",
+                                        "validate": {
+                                            "unique": false,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true
+                                        },
+                                        "delimiter": true,
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Number of person-trips planned (upcoming quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "number",
+                                        "input": true,
+                                        "key": "personTrips",
+                                        "validate": {
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true,
+                                            "min": 0
+                                        },
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    },
+                                    {
+                                        "labelPosition": "left-left",
+                                        "label": "Speaker fees (upcoming quarter):",
+                                        "mask": false,
+                                        "tableView": true,
+                                        "labelWidth": 80,
+                                        "type": "currency",
+                                        "input": true,
+                                        "key": "speakerFees",
+                                        "validate": {
+                                            "unique": false,
+                                            "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                            "json": "",
+                                            "required": true
+                                        },
+                                        "delimiter": true,
+                                        "properties": {},
+                                        "tags": [],
+                                        "validateOn": "blur"
+                                    }
+                                ]
+                            },
+                            {
+                                "labelPosition": "left-left",
+                                "label": "Total remaining budget:",
+                                "mask": false,
+                                "tableView": true,
+                                "labelWidth": 80,
+                                "type": "currency",
+                                "input": true,
+                                "key": "remainingBudget",
+                                "validate": {
+                                    "unique": false,
+                                    "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "conditional": {
+                                    "show": "",
+                                    "when": "",
+                                    "json": ""
+                                },
+                                "delimiter": true,
+                                "properties": {},
+                                "customConditional": "",
+                                "tags": [],
+                                "validateOn": "blur"
+                            },
+                            {
+                                "labelPosition": "left-left",
+                                "label": "Total funding received last quarter:",
+                                "mask": false,
+                                "tableView": true,
+                                "labelWidth": 80,
+                                "type": "currency",
+                                "input": true,
+                                "key": "fundingReceived",
+                                "delimiter": true,
+                                "properties": {},
+                                "tags": [],
+                                "validateOn": "blur",
+                                "validate": {
+                                    "required": true,
+                                    "unique": false,
+                                    "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                    "json": ""
+                                }
+                            },
+                            {
+                                "labelPosition": "left-left",
+                                "label": "Total funding requested this quarter:",
+                                "mask": false,
+                                "tableView": true,
+                                "labelWidth": 80,
+                                "type": "currency",
+                                "input": true,
+                                "key": "fundingRequested",
+                                "validate": {
+                                    "unique": false,
+                                    "customMessage": "This information is required to help us make more effective and fairer funding decisions!",
+                                    "json": "",
+                                    "required": true
+                                },
+                                "delimiter": true,
+                                "properties": {},
+                                "tags": [],
+                                "validateOn": "blur"
+                            }
+                        ],
+                        "properties": {}
+                    },
+                    {
+                        "label": "Please include a budget for your proposal: (.xlsx, .xls only)",
                         "mask": false,
                         "tableView": true,
+                        "type": "file",
+                        "input": true,
+                        "key": "budgetFile",
+                        "defaultValue": [],
+                        "filePattern": "*.xlsx, *.xls",
+                        "storage": "url",
+                        "dir": "",
+                        "webcam": false,
+                        "url": "",
+                        "conditional": {
+                            "json": ""
+                        },
+                        "customConditional": "",
+                        "validate": {
+                            "required": true,
+                            "unique": false,
+                            "customMessage": "Please upload a valid budget for your proposal",
+                            "json": ""
+                        }
+                    },
+                    {
+                        "labelPosition": "left-left",
+                        "showWordCount": false,
+                        "showCharCount": false,
+                        "tableView": true,
+                        "type": "textfield",
+                        "input": true,
+                        "key": "advisorName",
+                        "defaultValue": "",
+                        "label": "Name of Faculty Advisor:",
+                        "inputFormat": "plain",
+                        "validate": {
+                            "customMessage": "",
+                            "json": "",
+                            "required": true
+                        },
+                        "properties": {},
+                        "tags": [],
+                        "widget": {
+                            "type": ""
+                        }
+                    },
+                    {
+                        "labelPosition": "left-left",
+                        "showWordCount": false,
+                        "showCharCount": false,
+                        "tableView": true,
+                        "type": "textfield",
+                        "input": true,
+                        "key": "advisorEmail",
+                        "label": "Email of Faculty Advisor:",
+                        "properties": {},
+                        "tags": [],
+                        "defaultValue": "",
+                        "validateOn": "blur",
+                        "validate": {
+                            "required": true,
+                            "pattern": "[a-zA-Z0-9\\.]+@[a-zA-Z0-9\\.]+\\.[a-zA-Z0-9\\.]+",
+                            "customMessage": "Please enter a valid email address",
+                            "json": ""
+                        },
+                        "inputFormat": "plain",
+                        "widget": {
+                            "type": ""
+                        }
+                    },
+                    {
                         "type": "button",
-                        "label": "Find Study Space",
+                        "label": "Submit",
                         "key": "submit",
-                        "input": true
+                        "disableOnInvalid": true,
+                        "theme": "primary",
+                        "input": true,
+                        "tableView": true
                     }
                 ],
                 "settings": {
@@ -287,112 +1090,12 @@
                 }
             }).then(function(form) {
                 form.on('submit', function(submission) {
-                    var start = new Date(submission.data.dateTime);
-                    var end;
-                    if(submission.data.duration === "15Minutes"){
-                        end = new Date(start.getTime() + 15*60000);
-                    }
-                    else if(submission.data.duration === "30Minutes"){
-                        end = new Date(start.getTime() + 30*60000);
-                    }
-                    else if(submission.data.duration === "60Minutes") {
-                        end = new Date(start.getTime() + 60*60000);
-                    }
-                    else{
-                        // default to 30 minutes
-                        end = new Date(start.getTime() + 30*60000);
-                    }
-                    // reports local time with UTC offset
-                    queryAvailability(start.toIsoString(), end.toIsoString());
-                })});
-        </script>
-
-
-        <script>
-            function queryAvailability(start, end){
-				var availablerooms = document.getElementById("availablerooms");
-				// Clear webpage display before querying to make sure that the displayed data is always up-to-date
-                while (availablerooms.firstChild) {
-                    availablerooms.removeChild(availablerooms.firstChild);
-                }
-				availablerooms.innerHTML = '';
-                var xmldoc = document.implementation.createDocument("http://www.collegenet.com/r25", "r25:space_availability", null);
-                var rooms = [233, 1282, 1251, 126, 127, 128, 129, 130, 131, 132, 12, 101, 102, 103, 104, 105, 106,
-                193, 194, 195, 196, 108, 180, 181, 182, 183, 184, 185, 186, 299];
-                rooms.forEach(appendRoom);
-                function appendRoom(value){
-                    var requirement = xmldoc.createElement("r25:requirements");
-                    var space = xmldoc.createElement("r25:space");
-                    var space_id = xmldoc.createElement("r25:space_id");
-                    space_id.appendChild(xmldoc.createTextNode(value));
-                    space.appendChild(space_id);
-                    requirement.appendChild(space);
-                    xmldoc.documentElement.appendChild(requirement);
-                }
-                var dates = xmldoc.createElement("r25:dates");
-                var start_dt = xmldoc.createElement("r25:start_dt");
-                var end_dt = xmldoc.createElement("r25:end_dt");
-                // TODO: server might not parse local times properly
-                start_dt.appendChild(xmldoc.createTextNode(start));
-                end_dt.appendChild(xmldoc.createTextNode(end));
-                dates.appendChild(start_dt);
-                dates.appendChild(end_dt);
-                xmldoc.documentElement.appendChild(dates);
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "proxy.php");
-                xmlhttp.setRequestHeader("Content-type", "text/xml");
-                xmlhttp.onreadystatechange = function(){
-                    if (this.readyState === 4 && this.status === 200){
-                        var rooms = xmlhttp.responseXML.getElementsByTagNameNS("http://www.collegenet.com/r25", "space");
-                        var arr = [];
-                        for (let i = 0; i < rooms.length; i++){
-                            var room = rooms[i];
-                            var avl = room.getElementsByTagNameNS("http://www.collegenet.com/r25", "available_dates")[0];
-                            if (avl.textContent !== "0"){
-                                // Room is available, push to array
-                                arr.push(room.getElementsByTagNameNS("http://www.collegenet.com/r25", "formal_name")[0].textContent.slice(24));
-                            }
-                        }
-                        createTable(arr);
-                    }
-                };
-                xmlhttp.send(xmldoc);
-            }
-            function createTable(tableData) {
-				var availablerooms = document.getElementById("availablerooms");
-				if (tableData.length > 0){
-					var table = document.createElement('table');
-					var att = document.createAttribute("class");
-					att.value = "minimalistBlack";
-					table.setAttributeNode(att);
-					var tableBody = document.createElement('tbody');
-					var row, cell;
-
-					tableData.forEach(function(data, index, array) {
-						if (index % 4 === 0) {
-							row = document.createElement('tr');
-							cell = document.createElement('td');
-							cell.appendChild(document.createTextNode(data));
-							row.appendChild(cell);
-							tableBody.appendChild(row);
-						}
-						else{
-							cell = document.createElement('td');
-							cell.appendChild(document.createTextNode(data));
-							row.appendChild(cell);
-						}
-					});
-
-					table.appendChild(tableBody);
-					availablerooms.appendChild(table);
-				}
-				else{
-					availablerooms.innerHTML = 'All rooms are booked for the chosen duration!';
-				}
-            }
+                    console.log(submission);
+                    writeUserData(submission.data.groupName,submission);
+            })});
+             //window.onload = writeUserData("userID","username",submission);
         </script>
         <script src="assets/js/plugins.js"></script>
         <script src="assets/js/main.js"></script>
-
     </body>
 </html>
